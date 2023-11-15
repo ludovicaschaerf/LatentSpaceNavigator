@@ -16,6 +16,9 @@ export default function App() {
     
     const vectors = useStore((state) => state.vectors);
     const [imageData, setImageData] = useState('');
+    const [oldPos, setoldPos] = useState('');
+    const oldposition = useStore((state) => state.oldposition);
+    const colorclicked = useStore((state) => state.colorclicked);
     
     useEffect(() => {
         async function fetchImage() {
@@ -25,17 +28,18 @@ export default function App() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(position),
+                body: JSON.stringify([colorclicked, oldposition]),
                 });
                 const data = await response.json();
                 setImageData(data.imageData);
+                setoldPos(data.newPosition);
             } catch (error) {
                 console.error('Error fetching image:', error);
             }
         }
 
         fetchImage();
-    }, [position]);
+    }, [colorclicked, oldposition]);
 
 
     return (
@@ -57,6 +61,8 @@ export default function App() {
                             index={index}
                             direction={vectors[vec].direction}
                             color={vectors[vec].color}
+                            colorname={vec}
+                            oldpos={oldPos}
                             scale={0.5}
                         />
                     ))}
