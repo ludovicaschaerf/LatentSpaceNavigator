@@ -1,6 +1,7 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import React, { useRef, useState, useEffect } from "react";
 import { Vector3 } from "three";
+import * as THREE from 'three';
 import { OrbitControls, Bounds, Box } from "@react-three/drei";
 import { useStore } from "./store/useStore.jsx";
 
@@ -9,9 +10,33 @@ import Pivot from "./Pivot.jsx";
 import Cloud from "./Cloud.jsx";
 import Arrow from "./Arrow.jsx";
 
+
 export default function App() {
     const position = useStore((state) => state.position);
+    
     const vectors = useStore((state) => state.vectors);
+    const [imageData, setImageData] = useState('');
+    
+    useEffect(() => {
+        async function fetchImage() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/get-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(position),
+                });
+                const data = await response.json();
+                setImageData(data.imageData);
+            } catch (error) {
+                console.error('Error fetching image:', error);
+            }
+        }
+
+        fetchImage();
+    }, [position]);
+
 
     return (
         <>
@@ -25,7 +50,7 @@ export default function App() {
                     fit
                     margin={3}
                 >
-                    <Pivot position={position} />
+                    <Pivot position={position} imageData={imageData} />
                     {Object.keys(vectors).map((vec, index) => (
                         <Arrow
                             position={position}
@@ -36,9 +61,11 @@ export default function App() {
                         />
                     ))}
                 </Bounds>
-
+                
                 <Cloud />
             </Canvas>
+            
         </>
     );
+
 }
