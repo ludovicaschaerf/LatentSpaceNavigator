@@ -9,6 +9,7 @@ import Info from "./Info.jsx";
 import Pivot from "./Pivot.jsx";
 import Cloud from "./Cloud.jsx";
 import Arrow from "./Arrow.jsx";
+import Thumbnail from "./Thumbnail.jsx";
 
 
 export default function App() {
@@ -16,7 +17,9 @@ export default function App() {
     
     const vectors = useStore((state) => state.vectors);
     const [imageData, setImageData] = useState('');
-    const [oldPos, setoldPos] = useState('');
+    const [colorWheel, setColorWheel] = useState('');
+    const [colorPalette, setColorPalette] = useState('');
+    const [oldPos, setOldPos] = useState('');
     const oldposition = useStore((state) => state.oldposition);
     const colorclicked = useStore((state) => state.colorclicked);
     
@@ -32,19 +35,49 @@ export default function App() {
                 });
                 const data = await response.json();
                 setImageData(data.imageData);
-                setoldPos(data.newPosition);
+                setOldPos(data.newPosition);
+            } catch (error) {
+                console.error('Error fetching image:', error);
+            }
+        }
+        async function fetchImageColors() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/get-colors', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify([colorclicked, oldposition]),
+                });
+                const data = await response.json();
+                setColorPalette(data.colorPalette);
+                setColorWheel(data.colorWheel);
             } catch (error) {
                 console.error('Error fetching image:', error);
             }
         }
 
-        fetchImage();
+        fetchImage()
+        .then((result) => {
+          console.log('First call finished', imageData);
+          // After the first call is finished, start the second call
+          return fetchImageColors();
+        })
+        .then((result) => {
+          console.log('Second call finished', colorWheel);
+          // Both calls are now finished
+        })
+        .catch((error) => {
+          console.error('An error occurred', error);
+        });
+        
     }, [colorclicked, oldposition]);
-
 
     return (
         <>
             <Info />
+            <Thumbnail imageData={imageData} colorPalette={colorPalette} colorWheel={colorWheel} />
+            
             <Canvas>
                 <OrbitControls />
                 <ambientLight intensity={1} />

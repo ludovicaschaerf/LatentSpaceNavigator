@@ -9,7 +9,7 @@ export let useStore = create((set, get) => ({
             direction: [
                 0.040419829737698976, 0.01407547703306311, -0.08619420876018216,
             ],
-            color: "#A52A2A",
+            color: "#80461B",
         },
         Yellow: {
             direction: [
