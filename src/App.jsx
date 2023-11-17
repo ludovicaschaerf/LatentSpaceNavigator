@@ -19,6 +19,8 @@ export default function App() {
     const [imageData, setImageData] = useState('');
     const [colorWheel, setColorWheel] = useState('');
     const [colorPalette, setColorPalette] = useState('');
+    const [colorScheme, setColorScheme] = useState('');
+    const [schemeError, setSchemeError] = useState('');
     const [oldPos, setOldPos] = useState('');
     const oldposition = useStore((state) => state.oldposition);
     const colorclicked = useStore((state) => state.colorclicked);
@@ -52,6 +54,8 @@ export default function App() {
                 const data = await response.json();
                 setColorPalette(data.colorPalette);
                 setColorWheel(data.colorWheel);
+                setColorScheme(data.colorScheme);
+                setSchemeError(data.schemeError);
             } catch (error) {
                 console.error('Error fetching image:', error);
             }
@@ -76,7 +80,8 @@ export default function App() {
     return (
         <>
             <Info />
-            <Thumbnail imageData={imageData} colorPalette={colorPalette} colorWheel={colorWheel} />
+            <Thumbnail imageData={imageData} colorPalette={colorPalette} colorWheel={colorWheel} 
+                        colorScheme={colorScheme} schemeError={schemeError} />
             
             <Canvas>
                 <OrbitControls />

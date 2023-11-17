@@ -1,6 +1,6 @@
 import { useStore } from "./store/useStore";
 
-export default function Thumbnail({ imageData, colorPalette, colorWheel }) {
+export default function Thumbnail({ imageData, colorPalette, colorWheel, colorScheme, schemeError }) {
     
     const thumbS = {
         style: 'flex',    // Using flex for inner alignment
@@ -35,6 +35,7 @@ export default function Thumbnail({ imageData, colorPalette, colorWheel }) {
                         )}
                     </p>
                     <h3>color harmony </h3>
+                    <p><b>{colorScheme}</b>, {schemeError} error </p>
                     {colorUrl ? <img src={colorUrl} alt="Loaded" width="100%" /> : <p>No image loaded</p>}
 
                 </div>
