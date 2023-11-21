@@ -73,14 +73,14 @@ def get_color_harmony_plot(colors):
     color_hues = [rgb2hsv(*hex2rgb(col))[0] - 90 for col in colors]  # Example hues
     print(color_hues)
     # Convert degrees to radians and plot the radii
-    for hue in color_hues:
+    for i, hue in enumerate(color_hues):
         # Calculate the end point of the radius
         end_x = center_x + radius * np.cos(np.radians(hue))
         end_y = center_y + radius * np.sin(np.radians(hue))
 
         # Plot a line from the center to the edge of the hue wheel
-        ax.plot([center_x, end_x], [center_y, end_y], 'b-')  # 'w-' specifies a white line
-        ax.plot([end_x], [end_y], 'b.')  # 'w-' specifies a white line
+        ax.plot([center_x, end_x], [center_y, end_y], 'w-', markersize=4)  # 'w-' specifies a white line
+        ax.plot([end_x], [end_y], color=colors[i], marker='o', markerfacecolor=colors[i], markersize=15)  # 'w-' specifies a white line
     
     # plt.savefig('test_small.png')
     byte_arr_wheel = io.BytesIO()

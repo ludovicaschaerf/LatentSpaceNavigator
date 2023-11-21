@@ -56,17 +56,17 @@ def is_double_complementary(hues):
 # Main function to determine the color harmony scheme
 def color_harmony(hues):
     if is_monochromatic(hues)[0]:
-        return "Monochromatic", is_monochromatic(hues)[1]
+        return "monochromatic", is_monochromatic(hues)[1]
     elif is_analogous(hues)[0]:
-        return "Analogous", is_analogous(hues)[1]
+        return "analogous", is_analogous(hues)[1]
     elif is_complementary(hues)[0]:
-        return "Complementary", is_complementary(hues)[1]
+        return "complementary", is_complementary(hues)[1]
     elif is_triadic(hues)[0]:
-        return "Triadic", is_triadic(hues)[1]
+        return "triadic", is_triadic(hues)[1]
     elif is_split_complementary(hues)[0]:
-        return "Split Complementary", is_split_complementary(hues)[1]
+        return "split complementary", is_split_complementary(hues)[1]
     elif is_double_complementary(hues)[0]:
-        return "Double Complementary", is_double_complementary(hues)[1]
+        return "double complementary", is_double_complementary(hues)[1]
     else:
         return "None", 0
 
